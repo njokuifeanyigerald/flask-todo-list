@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<div class="container">
+    <h1>Todo List</h1>
+    <div>add a new todo list</div>
+    <form action="{{ url_for('add') }}" method="POST" >
+            <input class="form-control" type="text" name="todoitem">
+            <input value="Add item" type="submit"  >
+
+    </form>
+    <div class="form-group">
+{#            <h2>incomplete items</h2>#}
+{#            <ul>#}
+{#                {% for todo in todos %}#}
+{#                 <li style="font-size: 30pt">{{ todo.text }} <a href="{{ url_for('complete', id=todo.id) }}">mark as complete</a> </li>#}
+{#                {% endfor %}#}
+{#            </ul>#}
+            <h2>incomplete items</h2>
+            <ul>
+                {% for todo in incomplete %}
+                 <li style="font-size: 30pt">{{ todo.text }} <a href="{{ url_for('complete', id=todo.id) }}">mark as complete</a> </li>
+                {% endfor %}
+            </ul>
+            <h2>complete</h2>
+            <ul>
+                {% for todo in complete %}
+                <li style="font-size: 30pt">{{ todo.text }}</li>
+                {% endfor %}
+            </ul>
+
+    </div>
+</div>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
