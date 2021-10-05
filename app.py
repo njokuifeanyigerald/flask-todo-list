@@ -1,5 +1,7 @@
 from flask import  Flask, request, render_template, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.sql import func
+from sqlalchemy import desc
 
 app = Flask(__name__)
 
@@ -13,11 +15,12 @@ class Users(db.Model):
     id= db.Column(db.Integer(), primary_key=True)
     text = db.Column(db.String(100))
     complete =db.Column(db.Boolean())
+    date = db.Column(db.DateTime(timezone=True), default=func.now())
 
 @app.route('/')
 def home():
     incomplete =Users.query.filter_by(complete=False).all()
-    complete = Users.query.filter_by(complete=True).all()
+    complete = Users.query.filter_by(complete=True).all().order_by(desc(Users.date))
 
     return render_template('home.html', incomplete =incomplete, complete=complete)
 
