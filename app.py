@@ -11,30 +11,38 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 db=SQLAlchemy(app)
 
 
-class Users(db.Model):
+
+
+class Note(db.Model):
     id= db.Column(db.Integer(), primary_key=True)
     text = db.Column(db.String(100))
     complete =db.Column(db.Boolean())
     date = db.Column(db.DateTime(timezone=True), default=func.now())
 
+    
+
+    
+
 @app.route('/')
 def home():
-    incomplete =Users.query.filter_by(complete=False).all()
-    complete = Users.query.filter_by(complete=True).all().order_by(desc(Users.date))
+    incomplete =Note.query.filter_by(complete=False).order_by(desc(Note.date)).all()
+    # incomplete =Note.query.filter_by(complete=False).all()
+    complete = Note.query.filter_by(complete=True).order_by(desc(Note.date)).all()
 
     return render_template('home.html', incomplete =incomplete, complete=complete)
 
+
 @app.route('/add', methods=['POST'])
 def add():
-    user = Users(text=request.form['todoitem'], complete=False)
-    db.session.add(user)
+    note = Note(text=request.form['todoitem'], complete=False)
+    db.session.add(note)
     db.session.commit()
     return redirect (url_for('home'))
 
 @app.route('/complete/<id>')
 def complete(id):
-    user = Users.query.filter_by(id=int(id)).first()
-    user.complete = True
+    note = Note.query.filter_by(id=int(id)).first()
+    note.complete = True
     db.session.commit()
 
     return redirect (url_for('home'))
